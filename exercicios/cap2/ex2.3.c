@@ -16,5 +16,8 @@ pontos (:) seguidos de um espaço e deixe o cursor posicionado após o espaço.*
     printf("Este e \num programa em C\n");
     printf("Este\ne\num\nprograma\nem\nC\n");
     printf("Este\te\tum\tprograma\tem\tC\n");
+/*aqui é outro exercício */
+    a = 2;
+    printf("O resto de %d dividido por %d e %d", numero, a, numero % a);
     return 0;
 };
