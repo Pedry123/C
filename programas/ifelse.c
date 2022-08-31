@@ -15,4 +15,5 @@ main() {
    printf("%s\n", grau >= 60 ? "Aprovado." : "Reprovado.");
    /* ou */
    grau >= 60 ? printf("Aprovado.\n") : printf("Reprovado.\n");
+   return 0;
 }
