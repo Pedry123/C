@@ -20,6 +20,6 @@ main() {
     printf("Numero de alunos aprovados: %d\n", ap);
     printf("Numero de alunos reprovados: %d\n", rep);
     if (ap > 8) {
-        printf("Cobrar Taxa Escolar.");
+        printf("Cobrar Taxa Escolar."); 
     }
-}
+} 
