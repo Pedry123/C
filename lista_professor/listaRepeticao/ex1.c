@@ -1,6 +1,6 @@
 #include<stdio.h>
 int main () {
-    int num, i = 0;
+    int num, i = 1;
 
     printf("Digite um numero inteiro positivo: \n");
     scanf("%d", &num);
@@ -13,9 +13,7 @@ int main () {
             }
         }
         i++;
-        printf("%d", num);
-        printf("%d", i);
-    } while (i < num);
+    } while (i <= num);
     return 0;
     //vai ser terminada ainda
 }
