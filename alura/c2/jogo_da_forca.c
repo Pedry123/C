@@ -1,5 +1,13 @@
 #include<stdio.h>
 #include<string.h>
+#include<stdlib.h>
+#include<time.h>
+#include"forca.h" //Assinatura das funções
+
+//Variáveis globais
+char palavrasecreta[TAMANHO_PALAVRA];
+char chutes[26];
+int chutesDados = 0;
 
 void abertura() {
     printf("**********************\n");
@@ -7,53 +15,134 @@ void abertura() {
     printf("**********************\n\n");
 }
 
-void chuta(char chutes[26], int* tentativas) {
+int jaChutou(char letra) {
+    int achou = 0;
+
+    for (int j = 0; j < chutesDados; j++) {
+        if (chutes[j] == letra) {
+            achou = 1;
+            break;
+        }
+    }
+    return achou;
+}
+
+void chuta() {
     char chute;
       scanf(" %c", &chute); // é bom NO SCANF por espaço pra não dar bug no compliador quando der o enter: isso é bom pra CHAR
 
-    chutes[(*tentativas)] = chute;
-    (*tentativas)++;    
+    chutes[chutesDados] = chute;
+    chutesDados++;    
 }
 
-int main() {
-    char palavrasecreta[20];
-    sprintf(palavrasecreta, "MELANCIA");
-    // guardar a string no vetor de char: sprintf
-    int acertou = 0;
-    int enforcou = 0;
-
-    char chutes[26];
-    int tentativas = 0;
-
-    printf("%d %d\n", &chutes[0], chutes);
-    printf("%d %d %d\n", &chutes[0], &chutes[1], &chutes[2]);
-    //Arrays são ponteiros cujos endereços são os mesmos do primeiro valor do array
-    //Arrays guardam elementos um do lado do outro
-    abertura();
-
-    do {
-
-      for (int i = 0; i < strlen (palavrasecreta); i++) {
-        int achou = 0;
-
-        for (int j = 0; j < strlen(palavrasecreta); j++) {
-            if (chutes[j] == palavrasecreta[i]) {
-                achou = 1;
-                break;
-            }
-        }
-
+void desenhaForca() {
+    for (int i = 0; i < strlen (palavrasecreta); i++) {
+        
+        int achou = jaChutou(palavrasecreta[i]);
         if (achou) {
             printf("%c ", palavrasecreta[i]);
         } else {
             printf("_ ");        
         }
-      }
-      printf("\n");
-      
-      chuta(chutes, &tentativas);
-      
+    }
+    printf("\n");
+}
 
-    } while(!acertou && !enforcou);
+void escolhePalavra() {
+    FILE* f;
+    f = fopen("palavras.txt", "r"); //r de read, função fopen devolve um ponteiro 
+    if (f == 0) {
+        printf("Desculpe, banco de dados indisponível.\n\n");
+        exit(1);
+    }
 
+    int qntPalavras;
+    fscanf(f, "%d", &qntPalavras);
+
+    srand(time(0));
+    int randomico = rand() % qntPalavras;
+
+    for(int i = 0; i <= randomico; i++) {
+        fscanf(f, "%s", palavrasecreta);
+    }
+
+    fclose(f);
+}
+
+void adicionaPalavra() {
+    char quer;
+
+    printf("Voce deseja adicionar uma nova palavra no jogo?(S/N)");
+    scanf(" %c", &quer);
+    if(quer == 'S') {
+        char novaPalavra[TAMANHO_PALAVRA];
+        printf("Qual a nova palavra?");
+        scanf("%s", novaPalavra);
+
+        FILE* f;
+        f = fopen("palavras.txt","r+"); //r+ leitura e escrita
+        if (f == 0) {
+            printf("Desculpe, banco de daods indisponível.\n");
+            exit(1); // 0 deu certo diferente de 0 deu errado
+        }
+        int qnt;
+        fscanf(f, "%d", &qnt);
+        qnt++;
+
+        fseek(f, 0, SEEK_SET);
+        fprintf(f, "%d", qnt);
+
+        fseek(f, 0, SEEK_END);
+        fprintf(f, "\n%s", novaPalavra);
+        //outras: feof() significa final fgetc() le proximo char fread() fwrite()
+        fclose(f);
+    }
+}
+
+int acertou() {
+    for (int i = 0; i < strlen(palavrasecreta); i++) {
+        if (!jaChutou(palavrasecreta[i])) {
+            return 0;
+        }
+    }
+    return 1;
+}
+
+int enforcou() {
+    int erros = 0;
+
+    for(int i = 0; i < chutesDados; i++) {
+        if (!jaChutou(palavrasecreta[i])) erros++;
+    }
+    
+    return erros >= 5;
+}
+
+void fim() {
+    if (acertou()) {
+        printf("Parabéns, você venceu!");
+    } else {
+        printf("Que pena! Você perdeu!");
+    }
+}
+int main() {
+
+    // guardar a string no vetor de char: sprintf
+
+    //Arrays são ponteiros cujos endereços são os mesmos do primeiro valor do array
+
+    //Arrays guardam elementos um do lado do outro
+
+    escolhePalavra();
+    abertura();
+
+    do {
+  
+      desenhaForca();
+      chuta();
+      
+    } while(!acertou() && !enforcou());
+    adicionaPalavra();
+
+    fim();
 }
