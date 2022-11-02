@@ -95,7 +95,7 @@ void adicionaPalavra() {
         FILE* f;
         f = fopen("palavras.txt","r+"); //r+ leitura e escrita
         if (f == 0) {
-            printf("Desculpe, banco de daods indisponível.\n");
+            printf("Desculpe, banco de dados indisponível.\n");
             exit(1); // 0 deu certo diferente de 0 deu errado
         }
         int qnt;
