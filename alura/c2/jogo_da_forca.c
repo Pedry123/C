@@ -36,6 +36,19 @@ void chuta() {
 }
 
 void desenhaForca() {
+    
+    int erros = chutesErrados();
+
+    printf("  _______       \n");
+    printf(" |/      |      \n");
+    printf(" |      %c%c%c  \n", (erros >= 1 ? '(' : ' '), (erros >= 1 ? '_' : ' '), (erros >= 1 ? ')' : ' '));
+    printf(" |      %c%c%c  \n", (erros >= 3 ? '\\' : ' '), (erros >= 2 ? '|' : ' '), (erros >= 3 ? '/' : ' '));
+    printf(" |       %c      \n", (erros >= 2 ? '|' : ' '));
+    printf(" |      %c %c   \n", (erros >= 4 ? '/' : ' '), (erros >= 4 ? '\\' : ' '));
+    printf(" |              \n");
+    printf("_|___           \n");
+    printf("\n\n");
+    
     for (int i = 0; i < strlen (palavrasecreta); i++) {
         
         int achou = jaChutou(palavrasecreta[i]);
@@ -108,21 +121,25 @@ int acertou() {
     return 1;
 }
 
-int enforcou() {
+int chutesErrados() {
     int erros = 0;
 
     for(int i = 0; i < chutesDados; i++) {
         if (!jaChutou(palavrasecreta[i])) erros++;
     }
-    
-    return erros >= 5;
+
+    return erros;
+}
+
+int enforcou() {
+    return chutesErrados() >= 5;
 }
 
 void fim() {
     if (acertou()) {
-        printf("Parabéns, você venceu!");
+        printf("Parabens, voce venceu!");
     } else {
-        printf("Que pena! Você perdeu!");
+        printf("Que pena! Voce foi enforcado!");
     }
 }
 int main() {
@@ -142,7 +159,6 @@ int main() {
       chuta();
       
     } while(!acertou() && !enforcou());
-    adicionaPalavra();
 
     fim();
 }
