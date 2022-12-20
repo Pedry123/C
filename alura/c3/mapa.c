@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "mapa.h"
 #include "fogefoge.h"
+#include "mapa.h"
 
 void liberaMapa(MAPA* m) {
     for(int i = 0; i < m->linhas; i++) {
